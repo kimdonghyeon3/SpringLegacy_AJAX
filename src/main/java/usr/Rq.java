@@ -159,17 +159,37 @@ public class Rq {
                 """.formatted(uri));
     }
 
-    public void json(Object articleDtos) {
-        resp.setContentType("text/html; charset=utf-8");
-
-        Map<String, Object> resultData = new LinkedHashMap<>();
-
-        resultData.put("resultCode", "s-1");
-        resultData.put("msg", "성공");
-        resultData.put("data", articleDtos);
+    public void json(Object resultData) {
+        resp.setContentType("application/json; charset=utf-8");
 
         String jsonStr = Ut.json.toStr(resultData, "");
         println(jsonStr);
+    }
+
+    public void json(Object data, String resultCode, String msg) {
+        json(new ResultData(resultCode, msg, data));
+    }
+
+    public void successJson(Object data) {
+        json(data, "S-1", "성공");
+    }
+
+    public void failJson(Object data) {
+        json(data, "F-1", "실패");
+    }
+
+    public long getLongParam(String paramName, int defaultValue) {
+        String value = req.getParameter(paramName);
+
+        if (value == null) {
+            return defaultValue;
+        }
+
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import usr.article.dto.ArticleDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ArticleRepository {
@@ -77,4 +78,10 @@ public class ArticleRepository {
     }
 
 
+    public List<ArticleDto> findAllIdGreaterThan(long fromId) {
+        return datum
+                .stream()
+                .filter(articleDto -> articleDto.getId() > fromId)
+                .collect(Collectors.toList());
+    }
 }

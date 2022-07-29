@@ -1,11 +1,14 @@
 package usr.article;
 
+import usr.ResultData;
 import usr.Rq;
 import usr.article.dto.ArticleDto;
 import usr.util.Ut;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArticleController {
 
@@ -97,8 +100,17 @@ public class ArticleController {
 
 
     public void getJson(Rq rq) {
-        List<ArticleDto> articleDtos = articleService.findAll();
+        long fromId = rq.getLongParam("fromId", -1);
 
-        rq.json(articleDtos);
+        List<ArticleDto> articleDtos = null;
+
+        if ( fromId == -1 ) {
+            articleDtos = articleService.findAll();
+        }
+        else {
+            articleDtos = articleService.findIdGreaterThan(fromId);
+        }
+
+        rq.successJson(articleDtos);
     }
 }
